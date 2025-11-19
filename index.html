@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitowy AND Solver</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+        input { width: 60px; margin-right: 10px; }
+        select { margin-right: 20px; }
+        button { margin-top: 10px; padding: 5px 10px; }
+        p { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Bitowy AND Solver</h1>
+    <p>Wpisz 5 liczb i system liczbowy (np. 2, 10, 16)</p>
+
+    <div id="inputs">
+        <div>
+            <input type="text" class="number" placeholder="Liczba">
+            <input type="number" class="base" placeholder="System">
+        </div>
+        <div>
+            <input type="text" class="number" placeholder="Liczba">
+            <input type="number" class="base" placeholder="System">
+        </div>
+        <div>
+            <input type="text" class="number" placeholder="Liczba">
+            <input type="number" class="base" placeholder="System">
+        </div>
+        <div>
+            <input type="text" class="number" placeholder="Liczba">
+            <input type="number" class="base" placeholder="System">
+        </div>
+        <div>
+            <input type="text" class="number" placeholder="Liczba">
+            <input type="number" class="base" placeholder="System">
+        </div>
+    </div>
+
+    <button onclick="calculate()">Oblicz AND</button>
+
+    <p>Wynik: <span id="result"></span></p>
+
+    <script src="solver.js"></script>
+</body>
+</html>

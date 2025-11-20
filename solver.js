@@ -145,3 +145,20 @@ function calculate() {
         if (decimal < 100000 || decimal > 999999) {
             showMessage(
                 "danger",
+                `Liczba w panelu <b>${i + 1}</b> po zamianie na system dziesiętny (${decimal}) nie jest 6-cyfrowa.`
+            );
+            document.getElementById("output").style.display = "none";
+            return;
+        }
+
+        decimalNumbers.push(decimal);
+        outputText += `${i + 1}: <b>${decimal}</b><br>`;
+    }
+
+    let result = decimalNumbers.reduce((acc, val) => acc & val);
+    outputText += `<br>Kod dostępu: <b>${result}</b>`;
+
+    const outputDiv = document.getElementById("output");
+    outputDiv.innerHTML = outputText;
+    outputDiv.style.display = "block";
+}

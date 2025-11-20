@@ -38,17 +38,13 @@ function detectSuggestedBase(str) {
     const hasEorF = letters.has('E') || letters.has('F');
 
     // 1) Szukamy podstaw, które dają 6-cyfrowy wynik w systemie 10
+    //    i są > 900000 (czyli zakres 900000–999999)
     const sixDigitCandidates = [];
     for (let base = minBase; base <= 16; base++) {
         const decimal = parseInt(str, base);
-        if (decimal >= 100000 && decimal <= 999999) {
 
-            // DODANA ZASADA:
-            // Dla podstaw > 10 (11–16) akceptujemy tylko liczby > 900000
-            if (base > 10 && decimal <= 900000) {
-                continue;
-            }
-
+        // tylko 6 cyfr i > 900000
+        if (decimal >= 900000 && decimal <= 999999) {
             sixDigitCandidates.push({ base, decimal });
         }
     }
@@ -56,12 +52,12 @@ function detectSuggestedBase(str) {
     if (sixDigitCandidates.length > 0) {
         const bases = sixDigitCandidates.map(c => c.base);
 
-        // Preferuj klasyczny HEX, jeśli pasuje
+        // Jeśli wśród kandydatów jest 16 → preferujemy 16 (klasyczny HEX)
         if (bases.includes(16)) {
             return 16;
         }
 
-        // Jeśli jedyną literą jest A i pasuje 15 → preferuj 15
+        // Jeśli jedyną literą jest A i wśród kandydatów jest 15 → preferujemy 15
         if (hasOnlyA && bases.includes(15)) {
             return 15;
         }
@@ -70,7 +66,7 @@ function detectSuggestedBase(str) {
         return Math.min(...bases);
     }
 
-    // 2) Jeżeli żadna podstawa nie daje 6-cyfrowego wyniku,
+    // 2) Jeżeli żadna podstawa nie daje 6-cyfrowego wyniku > 900000,
     // używamy prostszych heurystyk:
 
     if (hasEorF) {
@@ -84,6 +80,7 @@ function detectSuggestedBase(str) {
     // Domyślnie: minimalna możliwa podstawa
     return minBase;
 }
+
 
 
 // Automatyczne podpowiadanie systemu – ZAWSZE NADPISUJEMY
@@ -169,3 +166,4 @@ function calculate() {
     outputDiv.innerHTML = outputText;
     outputDiv.style.display = "block";
 }
+

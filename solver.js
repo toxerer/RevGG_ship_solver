@@ -20,11 +20,12 @@ function calculate() {
         }
 
         decimalNumbers.push(decimal);
-        outputText += `Liczba ${i+1} w systemie 10: ${decimal}<br>`;
+        outputText += `${i+1}: ${decimal}<br>`;
     }
 
     let result = decimalNumbers.reduce((acc, val) => acc & val);
-    outputText += `<br>Wynik bitowego AND: ${result}`;
+    outputText += `<br>Kod dostepu: ${result}`;
 
     document.getElementById("output").innerHTML = outputText;
 }
+

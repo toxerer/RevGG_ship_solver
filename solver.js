@@ -160,7 +160,7 @@ function calculate() {
         }
 
         decimalNumbers.push(decimal);
-        outputText += `${numStr}<small class="text-muted">(${base})</small> -> <b>${decimal}</b><br>`;
+        outputText += `${numStr}<span style="font-size: 10px;">(${base})</span> -> <b>${decimal}</b><br>`;
     }
 
     let result = decimalNumbers.reduce((acc, val) => acc & val);
@@ -170,6 +170,7 @@ function calculate() {
     outputDiv.innerHTML = outputText;
     outputDiv.style.display = "block";
 }
+
 
 
 

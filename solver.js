@@ -26,10 +26,11 @@ function calculate() {
     let result = decimalNumbers.reduce((acc, val) => acc & val);
     outputText += `<br>Kod dostepu: <b>${result}</b>`;
 
-    const outputDiv = document.getElementById("output");
-    outputDiv.innerHTML = outputText;
-    outputDiv.classList.remove("d-none"); // pokaż alert
+const outputDiv = document.getElementById("output");
+outputDiv.innerHTML = outputText;
+outputDiv.style.display = "block"; // pokazujemy wynik
 }
+
 
 
 

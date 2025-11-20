@@ -24,12 +24,13 @@ function calculate() {
     }
 
     let result = decimalNumbers.reduce((acc, val) => acc & val);
-    outputText += `<br>Kod dostepu: <b>${result}</b>`;
+    outputText += `<br>Kod dostępu: <b>${result}</b>`;
 
 const outputDiv = document.getElementById("output");
 outputDiv.innerHTML = outputText;
 outputDiv.style.display = "block"; // pokazujemy wynik
 }
+
 
 
 

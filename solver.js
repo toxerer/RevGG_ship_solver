@@ -149,7 +149,7 @@ function calculate() {
         }
 
         decimalNumbers.push(decimal);
-        outputText += `${decimal} -> <b>${decimal}</b><br>`;
+        outputText += `${numStr} -> <b>${decimal}</b><br>`;
     }
 
     let result = decimalNumbers.reduce((acc, val) => acc & val);
@@ -159,5 +159,6 @@ function calculate() {
     outputDiv.innerHTML = outputText;
     outputDiv.style.display = "block";
 }
+
 
 

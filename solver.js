@@ -37,34 +37,16 @@ function detectSuggestedBase(str) {
     const hasOnlyA = (letters.size === 1 && letters.has('A'));
     const hasEorF = letters.has('E') || letters.has('F');
 
-    // 1) Szukamy podstaw, które dają 6-cyfrowy wynik w systemie 10
-    const sixDigitCandidates = [];
-    for (let base = minBase; base <= 16; base++) {
+    // 1) Dla podstaw 11–16 sprawdzamy, czy po konwersji do systemu 10
+    // otrzymujemy 6-cyfrowy wynik. Jeśli tak – ta podstawa wygrywa.
+    for (let base = Math.max(minBase, 11); base <= 16; base++) {
         const decimal = parseInt(str, base);
         if (decimal >= 100000 && decimal <= 999999) {
-            sixDigitCandidates.push({ base, decimal });
+            return base; // "to jest jej system liczbowy"
         }
     }
 
-    if (sixDigitCandidates.length > 0) {
-        const bases = sixDigitCandidates.map(c => c.base);
-
-        // Jeśli wśród kandydatów jest 16 → preferujemy 16 (klasyczny HEX)
-        if (bases.includes(16)) {
-            return 16;
-        }
-
-        // Jeśli jedyną literą jest A i wśród kandydatów jest 15 → preferujemy 15
-        if (hasOnlyA && bases.includes(15)) {
-            return 15;
-        }
-
-        // W pozostałych przypadkach – najmniejsza możliwa podstawa,
-        // np. 3B4296 → 12
-        return Math.min(...bases);
-    }
-
-    // 2) Jeżeli żadna podstawa nie daje 6-cyfrowego wyniku,
+    // 2) Jeżeli żadna z podstaw 11–16 nie daje 6-cyfrowego wyniku,
     // używamy prostszych heurystyk:
 
     if (hasEorF) {
@@ -75,9 +57,10 @@ function detectSuggestedBase(str) {
         return 15;
     }
 
-    // Domyślnie: minimalna możliwa podstawa
+    // Domyślnie: minimalna możliwa podstawa (np. 2–10 albo >10, jeśli brak innych wskazówek)
     return minBase;
 }
+
 
 // Automatyczne podpowiadanie systemu – ZAWSZE NADPISUJEMY
 document.addEventListener("DOMContentLoaded", () => {
@@ -162,3 +145,4 @@ function calculate() {
     outputDiv.innerHTML = outputText;
     outputDiv.style.display = "block";
 }
+

@@ -9,61 +9,49 @@ function showMessage(type, text) {
     `;
 }
 
-// WYKRYWANIE PROPONOWANEGO SYSTEMU LICZBOWEGO NA PODSTAWIE CIĄGU
+// WYKRYWANIE SYSTEMU (2–16)
 function detectSuggestedBase(str) {
     str = str.trim().toUpperCase();
     if (!str) return null;
 
-    // Jeśli są znaki spoza 0-9A-Z, nie sugerujemy nic
-    if (!/^[0-9A-Z]+$/.test(str)) {
-        return null;
-    }
+    // Znaki dopuszczalne tylko 0–9 i A–F
+    if (!/^[0-9A-F]+$/.test(str)) return null;
 
-    // Najpierw proste heurystyki na popularne systemy
-    if (/^[01]+$/.test(str)) {
-        return 2;   // tylko 0 i 1
-    }
-    if (/^[0-7]+$/.test(str)) {
-        return 8;   // cyfry 0-7
-    }
-    if (/^[0-9]+$/.test(str)) {
-        return 10;  // tylko cyfry dziesiętne
-    }
-    if (/^[0-9A-F]+$/.test(str)) {
-        return 16;  // klasyczny hex
-    }
+    // Popularne systemy
+    if (/^[01]+$/.test(str)) return 2;
+    if (/^[0-7]+$/.test(str)) return 8;
+    if (/^[0-9]+$/.test(str)) return 10;
 
-    // Ogólny przypadek: minimalna podstawa wynikająca z najwyższego symbolu
+    // Jeśli ciąg ma litery A–F → minimalny możliwy system = max digit + 1
     let maxVal = 0;
     for (let ch of str) {
         let val;
-        if (ch >= '0' && ch <= '9') {
-            val = ch.charCodeAt(0) - '0'.charCodeAt(0);
-        } else {
-            val = ch.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
-        }
+        if (ch >= '0' && ch <= '9') val = ch.charCodeAt(0) - 48;
+        else val = ch.charCodeAt(0) - 55; // A=10, B=11...
+
         if (val > maxVal) maxVal = val;
     }
 
     let minBase = Math.max(maxVal + 1, 2);
-    if (minBase > 36) return null; // poza zakresem, który obsługuje parseInt
+
+    // Ograniczenie: tylko systemy 2–16
+    if (minBase < 2 || minBase > 16) return null;
 
     return minBase;
 }
 
-// Podpinamy nasłuchiwanie wpisywania w panele,
-// żeby sugerować system liczbowy w sąsiednim inputcie
+// Automatyczne podpowiadanie systemu
 document.addEventListener("DOMContentLoaded", () => {
     const numberInputs = document.querySelectorAll(".number");
     const baseInputs = document.querySelectorAll(".base");
 
     numberInputs.forEach((input, index) => {
         const baseInput = baseInputs[index];
-
+        
         input.addEventListener("input", () => {
             const suggestion = detectSuggestedBase(input.value);
-            // Podpowiadamy tylko, jeśli pole systemu jest puste,
-            // żeby nie nadpisywać świadomie wpisanej wartości
+
+            // Podpowiadamy tylko jeśli pole systemu jest puste
             if (suggestion !== null && baseInput.value.trim() === "") {
                 baseInput.value = suggestion;
             }
@@ -81,24 +69,39 @@ function calculate() {
     document.getElementById("msgBox").innerHTML = "";
 
     for (let i = 0; i < numbers.length; i++) {
-        let numStr = numbers[i].value.trim();
+        let numStr = numbers[i].value.trim().toUpperCase();
         let base = parseInt(bases[i].value);
 
-        // Walidacja
-        if (!numStr || isNaN(base) || base < 2 || base > 36) {
-            showMessage("danger", `Nieprawidłowa liczba lub system w panelu <b>${i + 1}</b>.`);
+        // WALIDACJA
+        if (!numStr || isNaN(base) || base < 2 || base > 16) {
+            showMessage("danger", `Nieprawidłowa liczba lub system w panelu <b>${i + 1}</b> (dozwolone systemy: 2–16).`);
             document.getElementById("output").style.display = "none";
             return;
+        }
+
+        // Druga walidacja: czy liczba faktycznie pasuje do systemu 2–16
+        if (!/^[0-9A-F]+$/.test(numStr)) {
+            showMessage("danger", `Ciąg "<b>${numStr}</b>" zawiera niedozwolone znaki dla systemów 2–16.`);
+            document.getElementById("output").style.display = "none";
+            return;
+        }
+
+        // Sprawdzenie, czy digit nie przekracza podstawy
+        for (let ch of numStr) {
+            let val = (ch >= '0' && ch <= '9') 
+                    ? ch.charCodeAt(0) - 48 
+                    : ch.charCodeAt(0) - 55;
+
+            if (val >= base) {
+                showMessage("danger", `Znak "<b>${ch}</b>" nie może wystąpić w systemie <b>${base}</b>.`);
+                document.getElementById("output").style.display = "none";
+                return;
+            }
         }
 
         let decimal = parseInt(numStr, base);
-        if (isNaN(decimal)) {
-            showMessage("danger", `Nie udało się zamienić liczby "<b>${numStr}</b>" w systemie <b>${base}</b>.`);
-            document.getElementById("output").style.display = "none";
-            return;
-        }
-
         decimalNumbers.push(decimal);
+
         outputText += `${i + 1}: <b>${decimal}</b><br>`;
     }
 
@@ -107,5 +110,5 @@ function calculate() {
 
     const outputDiv = document.getElementById("output");
     outputDiv.innerHTML = outputText;
-    outputDiv.style.display = "block"; 
+    outputDiv.style.display = "block";
 }

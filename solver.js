@@ -9,7 +9,7 @@ function showMessage(type, text) {
     `;
 }
 
-// WYKRYWANIE SYSTEMU (2–16)
+// WYKRYWANIE SYSTEMU (2–16) Z PRIORYTETEM NA HEX (16), GDY SĄ LITERY
 function detectSuggestedBase(str) {
     str = str.trim().toUpperCase();
     if (!str) return null;
@@ -17,14 +17,16 @@ function detectSuggestedBase(str) {
     // Dopuszczalne znaki tylko 0–9 i A–F
     if (!/^[0-9A-F]+$/.test(str)) return null;
 
-    // Obliczamy najwyższą "wartość" znaku
     let maxVal = 0;
+    let hasLetter = false;
+
     for (let ch of str) {
         let val;
         if (ch >= '0' && ch <= '9') {
             val = ch.charCodeAt(0) - 48;      // '0' = 48
         } else {
-            val = ch.charCodeAt(0) - 55;      // 'A' = 65 → 65 - 55 = 10
+            val = ch.charCodeAt(0) - 55;      // 'A' = 65 → 10
+            hasLetter = true;
         }
         if (val > maxVal) maxVal = val;
     }
@@ -32,8 +34,14 @@ function detectSuggestedBase(str) {
     let minBase = Math.max(maxVal + 1, 2);
 
     // Ograniczenie do 2–16
-    if (minBase < 2 || minBase > 16) return null;
+    if (minBase > 16) return null;
 
+    // Jeśli są litery A–F, to zazwyczaj chodzi o HEX → sugerujemy 16
+    if (hasLetter) {
+        return 16; // wiemy, że minBase ≤ 16, bo sprawdziliśmy wyżej
+    }
+
+    // Bez liter – sugerujemy minimalną możliwą podstawę (2–16)
     return minBase;
 }
 
@@ -109,4 +117,5 @@ function calculate() {
     outputDiv.innerHTML = outputText;
     outputDiv.style.display = "block";
 }
+
 

@@ -160,7 +160,7 @@ function calculate() {
         }
 
         decimalNumbers.push(decimal);
-        outputText += `Panel ${i} <i class="bi bi-arrow-right-short"></i> <b>${decimal}</b><br>`;
+        outputText += `Panel ${i + 1} <i class="bi bi-arrow-right-short"></i> <b>${decimal}</b><br>`;
     }
 
     let result = decimalNumbers.reduce((acc, val) => acc & val);
@@ -170,6 +170,7 @@ function calculate() {
     outputDiv.innerHTML = outputText;
     outputDiv.style.display = "block";
 }
+
 
 
 

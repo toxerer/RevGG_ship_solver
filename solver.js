@@ -9,7 +9,7 @@ function calculate() {
         let base = parseInt(bases[i].value);
 
         if (!numStr || isNaN(base) || base < 2 || base > 36) {
-            alert(`Nieprawidłowa liczba lub system w wierszu ${i+1}`);
+            alert(`Nieprawidłowa liczba lub system w panelu ${i+1}`);
             return;
         }
 
@@ -28,4 +28,5 @@ function calculate() {
 
     document.getElementById("output").innerHTML = outputText;
 }
+
 

@@ -8,7 +8,6 @@ function showMessage(type, text) {
     `;
 }
 
-
 function detectSuggestedBase(str) {
     str = str.trim().toUpperCase();
     if (!str) return null;
@@ -152,7 +151,9 @@ function calculate() {
 function reset() {
     document.querySelectorAll('.base, .number').forEach(el => el.value = "");
     document.getElementById("output").style.display = 'none';
+    document.getElementById("msgBox").innerHTML = '';
 }
+
 
 
 

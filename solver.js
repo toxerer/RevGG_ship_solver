@@ -150,9 +150,10 @@ function calculate() {
 
 
 function reset() {
-    document.querySelectorAll('.base, .number')
-    .forEach(el => el.value = "");
+    document.querySelectorAll('.base, .number').forEach(el => el.value = "");
+    document.getElementById("output").style.display = 'none';
 }
+
 
 
 

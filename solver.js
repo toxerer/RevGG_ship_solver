@@ -111,13 +111,13 @@ function calculate() {
         let base = parseInt(bases[i].value);
 
         if (!numStr || isNaN(base) || base < 2) {
-            showMessage("danger", `Nieprawidłowa liczba lub system w panelu <b>${i + 1}</b>.`);
+            showMessage("danger", `Nieprawidłowa liczba lub podstawa w panelu <b>${i + 1}</b>.`);
             document.getElementById("output").style.display = "none";
             return;
         }
 
         if (!/^[0-9A-Z]+$/.test(numStr.toUpperCase())) {
-            showMessage("danger", `Ciąg "<b>${numStr}</b>" zawiera niedozwolone znaki dla systemów 2–36.`);
+            showMessage("danger", `Ciąg "<b>${numStr}</b>" zawiera niedozwolone znaki dla podstawy 2–36.`);
             document.getElementById("output").style.display = "none";
             return;
         }
@@ -128,7 +128,7 @@ function calculate() {
                 : ch.charCodeAt(0) - 55;
 
             if (val >= base) {
-                showMessage("danger", `Znak "<b>${ch}</b>" nie może wystąpić w systemie <b>${base}</b>.`);
+                showMessage("danger", `Znak "<b>${ch}</b>" nie może wystąpić w podstawie <b>${base}</b>.`);
                 document.getElementById("output").style.display = "none";
                 return;
             }
@@ -139,7 +139,7 @@ function calculate() {
         if (decimal < 100000 || decimal > 999999) {
             showMessage(
                 "danger",
-                `Liczba w panelu <b>${i + 1}</b> po zamianie na system dziesiętny (${decimal}) nie jest 6-cyfrowa.`
+                `Liczba w panelu <b>${i + 1}</b> po zamianie na podstawę dziesiętną (${decimal}) nie jest 6-cyfrowa.`
             );
             document.getElementById("output").style.display = "none";
             return;
@@ -163,6 +163,7 @@ function reset() {
     document.getElementById("output").style.display = 'none';
     document.getElementById("msgBox").innerHTML = '';
 }
+
 
 
 
